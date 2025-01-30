@@ -28,8 +28,6 @@ urlpatterns = [
     path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
     path('change_password/done/', password_change_done, name='password_change_done'),
 
- 
-
 ]
 
 
