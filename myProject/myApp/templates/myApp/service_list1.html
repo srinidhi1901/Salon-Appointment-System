@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salon Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .dashboard {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background-color: #1c1c1c;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .sidebar .logo {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .sidebar nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar nav ul li {
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .sidebar nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: block;
+      padding: 8px 0;
+    }
+
+    .sidebar nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background-color: #eee;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .profile-btn, 
+    .navbar .login-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .navbar .profile-btn:hover, 
+    .navbar .login-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .add-category-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .add-category-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Category Container - Flex Layout */
+    .category-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .category {
+      flex: 1;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .category h2 {
+      margin: 0;
+      display: inline-block;
+    }
+
+    .category .add-service-btn {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .category .add-service-btn:hover {
+      background-color: #218838;
+    }
+
+    .category img {
+      max-width: 150px;
+      max-height: 150px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .item p {
+      margin: 0;
+      flex-grow: 1;
+      font-weight: 600;
+    }
+
+    .service-details {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .service-details span {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .edit-btn,
+    .toggle-btn {
+      background-color: #ffc107;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .toggle-btn {
+      background-color: #17a2b8;
+      color: #fff;
+    }
+
+    .edit-btn:hover,
+    .toggle-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Align service details */
+    .service-details span {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .action-buttons {
+      margin-left: 20px; /* Added margin to separate action buttons */
+    }
+
+    /* Cross icon for delete */
+    .delete-btn {
+      background-color: transparent;
+      border: none;
+      color: #dc3545;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      opacity: 0.7;
+    }
+
+  </style>
+</head>
+<body>
+
+
+      <!-- Service Management Section -->
+      <div class="content">
+        <h1>Manage Services</h1>
+        
+        <!-- Add New Category Button -->
+        <button class="add-category-btn">+ Add New Category</button>
+        
+        <!-- Category Section -->
+        <div class="category-container">
+          <!-- Haircuts Category -->
+          <div class="category">
+            <div style="display: flex; justify-content: space-between;">
+              <h2>Haircuts</h2>
+              <button class="add-service-btn">+ Add Service</button>
+            </div>
+
+            <!-- Category Image -->
+            <input type="file" class="upload-input" id="haircut-img" accept="image/*">
+            <img id="haircut-preview" alt="Category Image" />
+
+            <!-- Services under Haircuts -->
+            <div class="item">
+              <p>Basic Haircut</p>
+              <div class="service-details">
+                <span>₹300</span>
+                <span>30 mins</span>
+              </div>
+              <div class="action-buttons">
+                <button class="toggle-btn">Enabled</button>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">×</button> <!-- Delete button with cross icon -->
+              </div>
+            </div>
+            <div class="item">
+              <p>Advanced Haircut</p>
+              <div class="service-details">
+                <span>₹500</span>
+                <span>45 mins</span>
+              </div>
+              <div class="action-buttons">
+                <button class="toggle-btn">Enabled</button>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">×</button> <!-- Delete button with cross icon -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Facials Category -->
+          <div class="category">
+            <div style="display: flex; justify-content: space-between;">
+              <h2>Facials</h2>
+              <button class="add-service-btn">+ Add Service</button>
+            </div>
+
+            <!-- Category Image -->
+            <input type="file" class="upload-input" id="facial-img" accept="image/*">
+            <img id="facial-preview" alt="Category Image" />
+
+            <!-- Services under Facials -->
+            <div class="item">
+              <p>Basic Facial</p>
+              <div class="service-details">
+                <span>₹400</span>
+                <span>40 mins</span>
+              </div>
+              <div class="action-buttons">
+                <button class="toggle-btn">Enabled</button>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">×</button> <!-- Delete button with cross icon -->
+              </div>
+            </div>
+            <div class="item">
+              <p>Gold Facial</p>
+              <div class="service-details">
+                <span>₹800</span>
+                <span>60 mins</span>
+              </div>
+              <div class="action-buttons">
+                <button class="toggle-btn">Enabled</button>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">×</button> <!-- Delete button with cross icon -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Preview uploaded images for Haircuts
+    document.getElementById('haircut-img').addEventListener('change', function(event) {
+      const preview = document.getElementById('haircut-preview');
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function() {
+        preview.src = reader.result;
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Preview uploaded images for Facials
+    document.getElementById('facial-img').addEventListener('change', function(event) {
+      const preview = document.getElementById('facial-preview');
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function() {
+        preview.src = reader.result;
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

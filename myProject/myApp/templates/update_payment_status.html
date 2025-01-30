@@ -1,0 +1,27 @@
+<!-- myapp/templates/update_payment_status.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Payment Status</title>
+    <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Update Payment Status for {{ payment.transaction_id }}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Update Status</button>
+        </form>
+
+        <br>
+        <a href="{% url 'payment_history' %}">Back to Payment History</a>
+    </div>
+
+</body>
+</html>
