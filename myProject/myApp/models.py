@@ -48,12 +48,17 @@ class Appointment(models.Model):
         return self.person_name
 
 
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to='categories/', null=True, blank=True)
+    image = models.ImageField(upload_to='category_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+
+
     
 
 

@@ -28,6 +28,12 @@ urlpatterns = [
     path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
     path('change_password/done/', password_change_done, name='password_change_done'),
 
+    path('manage_services/', views.manage_services, name='manage_services'),
+    path('add_category/', views.add_category, name='add_category'),
+    path('add_service/', views.add_service, name='add_service'),
+    path('delete_category/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('delete_service/<int:service_id>/', views.delete_service, name='delete_service'),
+
 ]
 
 

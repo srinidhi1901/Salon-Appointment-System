@@ -15,7 +15,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import Category, Service
+from .forms import CategoryForm, ServiceForm
 
 # User Registration
 def register(request):
@@ -222,5 +225,38 @@ def home_view(request):
     return render(request, 'home.html')
 
 
+
+
+def manage_services(request):
+    categories = Category.objects.prefetch_related('services').all()
+    category_form = CategoryForm()
+    service_form = ServiceForm()
+    return render(request, 'manage_services.html', {'categories': categories, 'category_form': category_form, 'service_form': service_form})
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            category = form.save()
+            return JsonResponse({'id': category.id, 'name': category.name, 'image_url': category.image.url if category.image else ''})
+    return JsonResponse({'error': 'Invalid data'}, status=400)
+
+def add_service(request):
+    if request.method == 'POST':
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            service = form.save()
+            return JsonResponse({'id': service.id, 'name': service.name, 'time': service.time, 'cost': str(service.cost), 'category_id': service.category.id})
+    return JsonResponse({'error': 'Invalid data'}, status=400)
+
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    category.delete()
+    return JsonResponse({'message': 'Category deleted'})
+
+def delete_service(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    service.delete()
+    return JsonResponse({'message': 'Service deleted'})
 
 

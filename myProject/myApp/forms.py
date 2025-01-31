@@ -3,7 +3,8 @@ from .models import UserDetails, Service
 from .models import Staff
 from .models import Appointment
 from .models import Service
-from django.contrib.auth.forms import PasswordChangeForm
+from django import forms
+from .models import Category, Service
 
 class UserDetailsForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -53,7 +54,7 @@ class ServiceForm(forms.ModelForm):
         }
 
 
-class CustomPasswordChangeForm(PasswordChangeForm):
+class PasswordChangeForm(forms.ModelForm):
     """
     A custom password change form that adds styling and placeholders to the default fields.
     """
@@ -79,3 +80,12 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             'placeholder': 'Re-enter your new password',
         })
     )
+
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'image']
+
+
