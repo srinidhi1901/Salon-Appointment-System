@@ -24,8 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('myApp.urls')),
     #   path('notifications/', views.notification_view, name='notifications'),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 
 

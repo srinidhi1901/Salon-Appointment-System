@@ -19,6 +19,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .models import Category, Service
 from .forms import CategoryForm, ServiceForm
+import logging
 
 # User Registration
 def register(request):
@@ -203,9 +204,6 @@ def notification_view(request):
     appointments = Appointment.objects.all()
     return render(request, 'myApp/notifications.html', {'appointments': appointments})
 
-def add_category(request):
-    categories = Category.objects.all()
-    return render(request, 'myApp/add_category.html', {'categories': categories})
 
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
@@ -231,15 +229,35 @@ def manage_services(request):
     categories = Category.objects.prefetch_related('services').all()
     category_form = CategoryForm()
     service_form = ServiceForm()
-    return render(request, 'manage_services.html', {'categories': categories, 'category_form': category_form, 'service_form': service_form})
+    return render(request, 'myApp/manage_services.html', {'categories': categories, 'category_form': category_form, 'service_form': service_form})
+ # Assuming you have a ModelForm
+
+
+
+logger = logging.getLogger(__name__)  # Logging setup
 
 def add_category(request):
-    if request.method == 'POST':
+    if request.method == "POST":
+        print("Received POST request!")  # Debugging
+        print(request.POST)  # Check form data
+        print(request.FILES)  # Check if image file is received
+
         form = CategoryForm(request.POST, request.FILES)
+
         if form.is_valid():
-            category = form.save()
-            return JsonResponse({'id': category.id, 'name': category.name, 'image_url': category.image.url if category.image else ''})
-    return JsonResponse({'error': 'Invalid data'}, status=400)
+            form.save()
+            print("Category saved!")  # Debugging
+            return redirect('add_category')  # Redirect back to the form
+        else:
+            print("Form errors:", form.errors)  # Debugging
+
+    else:
+        form = CategoryForm()
+
+    categories = Category.objects.all()  # Fetch categories to display
+    return render(request, 'myApp/add_category.html', {'form': form, 'categories': categories})
+
+
 
 def add_service(request):
     if request.method == 'POST':

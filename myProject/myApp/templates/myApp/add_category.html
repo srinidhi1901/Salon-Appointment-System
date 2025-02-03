@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Horizontal Card Layout</title>
+  <title>Category Management</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -58,8 +58,8 @@
       font-size: 1.5rem;
     }
 
-    .modal-content input[type="text"],
-    .modal-content input[type="file"] {
+    .modal-content input,
+    .modal-content button {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -71,8 +71,6 @@
       background-color: #007bff;
       color: #fff;
       border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
       cursor: pointer;
       font-size: 1rem;
     }
@@ -83,7 +81,6 @@
 
     .close-btn {
       background-color: #dc3545;
-      margin-top: 10px;
     }
 
     .close-btn:hover {
@@ -131,16 +128,29 @@
 
 <div class="container">
   <button class="add-category-btn" id="openModalBtn">Add Category</button>
-  <div class="category-container" id="categoryContainer"></div>
+  <div class="category-container">
+    {% for category in categories %}
+      <div class="category-card">
+        {% if category.image %}
+          <img src="{{ category.image.url }}" alt="{{ category.name }} Image">
+        {% endif %}
+        <h3>{{ category.name }}</h3>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 
 <div class="modal" id="addCategoryModal">
   <div class="modal-content">
     <h2>Add New Category</h2>
-    <input type="text" id="categoryName" placeholder="Category Name">
-    <input type="file" id="categoryImage" accept="image/*">
-    <button id="saveCategoryBtn">Save Category</button>
-    <button class="close-btn" id="closeModalBtn">Cancel</button>
+    
+    <form method="POST" enctype="multipart/form-data" action="{% url 'add_category' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save Category</button>
+      <button type="button" class="close-btn" id="closeModalBtn">Cancel</button>
+    </form>
+
   </div>
 </div>
 
@@ -149,8 +159,6 @@
   const modal = document.getElementById('addCategoryModal');
   const openModalBtn = document.getElementById('openModalBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
-  const saveCategoryBtn = document.getElementById('saveCategoryBtn');
-  const categoryContainer = document.getElementById('categoryContainer');
 
   // Open modal
   openModalBtn.addEventListener('click', () => {
@@ -160,42 +168,6 @@
   // Close modal
   closeModalBtn.addEventListener('click', () => {
     modal.style.display = 'none';
-  });
-
-  // Save category
-  saveCategoryBtn.addEventListener('click', () => {
-    const categoryName = document.getElementById('categoryName').value;
-    const categoryImage = document.getElementById('categoryImage').files[0];
-
-    if (categoryName && categoryImage) {
-      const reader = new FileReader();
-      reader.onload = function () {
-        // Create a new category card
-        const categoryCard = document.createElement('div');
-        categoryCard.classList.add('category-card');
-
-        const img = document.createElement('img');
-        img.src = reader.result;
-        img.alt = `${categoryName} Image`;
-
-        const title = document.createElement('h3');
-        title.textContent = categoryName;
-
-        categoryCard.appendChild(img);
-        categoryCard.appendChild(title);
-
-        // Add category card to the container
-        categoryContainer.appendChild(categoryCard);
-
-        // Clear inputs and close modal
-        document.getElementById('categoryName').value = '';
-        document.getElementById('categoryImage').value = '';
-        modal.style.display = 'none';
-      };
-      reader.readAsDataURL(categoryImage);
-    } else {
-      alert('Please fill out all fields.');
-    }
   });
 </script>
 
